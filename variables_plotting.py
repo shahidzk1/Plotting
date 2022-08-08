@@ -12,18 +12,16 @@ class before_after_ML_plots:
         self . bins                                  = bins
         self . range_min                             = range_min
         self . range_max                             = range_max
-        self . before_after_ML_dataframe_creator()
-        self . common_hist_features(h1d)
         
     #create dataframes for signal and background 
     def before_after_ML_dataframe_creator(self):
         #before ML
-        signal_in_original_df = self.original_df[self.original_df[self.generation_variable]>0]
-        back_in_original_df = self.original_df[self.original_df[self.generation_variable]==0]
+        signal_in_original_df = self.original_df[self.original_df[self.generation_variable]>0].sample(n=1500)
+        back_in_original_df = self.original_df[self.original_df[self.generation_variable]==0].sample(n=1500)
         
         #after ML
-        signal_in_after_ml = self.original_df[(self.original_df[self.generation_variable]>0) & ((self.original_df[self.xgb_variable]>self.selection_cut))]
-        back_in_after_ml = self.original_df[(self.original_df[self.generation_variable]==0) & ((self.original_df[self.xgb_variable]>self.selection_cut))]
+        signal_in_after_ml = self.original_df[(self.original_df[self.generation_variable]>0) & ((self.original_df[self.xgb_variable]>self.selection_cut))].sample(n=1500)
+        back_in_after_ml = self.original_df[(self.original_df[self.generation_variable]==0) & ((self.original_df[self.xgb_variable]>self.selection_cut))].sample(n=1500)
         
         return signal_in_original_df, back_in_original_df, signal_in_after_ml, back_in_after_ml
     
@@ -52,7 +50,7 @@ class before_after_ML_plots:
     #common features used in all the histograms
     def common_hist_features(self,h1d):
         h1d.SetStats(0)
-        h1d.SetMarkerSize(0.7)
+        h1d.SetMarkerSize(0.9)
         h1d.SetYTitle("counts")
         h1d.GetYaxis().CenterTitle()
         h1d.GetYaxis().SetTitleSize(0.05)
@@ -83,7 +81,7 @@ class before_after_ML_plots:
     def back_after_ml(self,h1d):
         h1d.SetMarkerColor(ROOT.kMagenta)
         h1d.SetLineColor(ROOT.kMagenta)
-        h1d.SetMarkerStyle(21)
+        h1d.SetMarkerStyle(25)
         h1d = self.common_hist_features(h1d)
         return h1d
     
@@ -91,7 +89,7 @@ class before_after_ML_plots:
     def sig_after_ml(self, h1d):
         h1d.SetMarkerColor(ROOT.kBlue)
         h1d.SetLineColor(ROOT.kBlue)
-        h1d.SetMarkerStyle(21)
+        h1d.SetMarkerStyle(25)
         h1d = self.common_hist_features(h1d)
         return h1d
     
